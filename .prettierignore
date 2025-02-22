@@ -1,0 +1,10 @@
+# Ignore artifacts:
+build
+public
+coverage
+
+# Ignore all HTML files:
+*.html
+
+package-lock.json
+package.json
