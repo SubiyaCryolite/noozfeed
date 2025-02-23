@@ -44,15 +44,16 @@ export interface SearchArgs extends SerializableArgs {
 
 export interface AppContextType extends AppPreferences {
   updateCategories: (category: Category) => void;
-  updateSources: (category: Category) => void;
+  updateSources: (source: Source) => void;
   updateAuthors: (author: Author) => void;
 }
 
 /**
  * Where the magic happens
  */
-export interface Article extends Omit<NewsApiArticle, "author"> {
+export interface Article extends NewsApiArticle {
   authors: string[];
+  keywords: string[];
 }
 
 export interface SearchContextType {
@@ -68,27 +69,25 @@ export interface SearchContextType {
 
   /**
    * The aggregated results that will be PAGINATED and SORTED client side
-   * TODO consider adding previousResults as a display placeholder while new data loads
    */
   results: Article[];
 
-  // /**
-  //  * The object used to let the context know that all providers are done fetching
-  //  */
-  // signals: Record<string, boolean>;
-
-  // /**
-  //  * The function called by each data provider when it has completed its call
-  //  * @param provider the data source
-  //  * @param completed completed value
-  //  */
-  // signal: (provider: string, completed: boolean) => void;
+  /**
+   * Income results from various sources
+   */
+  streaming: Article[];
 
   /**
    * The function called used by providers to pass its results
    * @param values The transformed payload from each provider
    */
   setArticles: React.Dispatch<React.SetStateAction<Article[]>>;
+
+  /**
+   * The function called used by providers to pass its results
+   * @param values The transformed payload from each provider
+   */
+  setStreaming: React.Dispatch<React.SetStateAction<Article[]>>;
 
   /**
    * Use this to update search arguments from within context

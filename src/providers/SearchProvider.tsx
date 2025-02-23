@@ -3,6 +3,7 @@ import { SearchContextType, SearchArgs, Article } from "@/interfaces";
 import SearchContext from "@/contexts/SearchContext";
 import { FeedType } from "@/constants";
 import { getDefaultValue, saveArgs } from "@/utils";
+import { useDataSources } from "@/data-source";
 
 interface SearchProviderProps {
   children: React.ReactNode;
@@ -18,9 +19,11 @@ export const SearchProvider: React.FC<SearchProviderProps> = ({
     getDefaultValue(type),
   );
   const [results, setArticles] = useState<Article[]>([]);
+  const [streaming, setStreaming] = useState<Article[]>([]);
 
   useEffect(() => {
     setIsLoading(true);
+    setArticles([]);
     if (type === FeedType.You) {
       saveArgs(searchArguments);
     }
@@ -32,11 +35,15 @@ export const SearchProvider: React.FC<SearchProviderProps> = ({
       searchArguments,
       setSearchArguments,
       results,
+      streaming,
       setArticles,
+      setStreaming,
       setIsLoading,
     }),
-    [results, isLoading, searchArguments, setSearchArguments],
+    [results, isLoading, searchArguments, setSearchArguments, streaming],
   );
+
+  useDataSources(payload);
 
   return <SearchContext value={payload}>{children}</SearchContext>;
 };

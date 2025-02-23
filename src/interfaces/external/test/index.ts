@@ -16,3 +16,7 @@ export interface NpmResult {
     ];
   };
 }
+
+export interface NpmResults {
+  results: NpmResult[];
+}

@@ -2,8 +2,9 @@ import { twMerge } from "tailwind-merge";
 import clsx, { ClassValue } from "clsx";
 import { format, parseISO, ParseISOOptions } from "date-fns";
 import { TZDate } from "@date-fns/tz";
+import useSWR, { SWRResponse, Fetcher } from "swr";
 
-import { SearchArgs, SerializableArgs } from "@/interfaces";
+import { Article, SearchArgs, SerializableArgs } from "@/interfaces";
 import { FeedType } from "@/constants";
 
 const PreferenceStorageKey = "user.preferences.search.args";
@@ -61,3 +62,31 @@ export const parseISODate = (
   }
   return parseISO(date, options);
 };
+
+export const fetcher = (
+  input: string | URL | globalThis.Request,
+  init?: RequestInit,
+) => fetch(input, init).then((res) => res.json());
+
+export const canUseSource = (
+  sources: Record<string, boolean>,
+  keyName: string,
+): boolean => {
+  if (Object.keys(sources).length === 0) return true;
+  return sources[keyName];
+};
+
+export const getArticle = (): Article => ({
+  authors: [],
+  keywords: [],
+  source: {
+    id: undefined,
+    name: undefined,
+  },
+  title: undefined,
+  description: undefined,
+  url: undefined,
+  urlToImage: undefined,
+  publishedAt: undefined,
+  author: undefined,
+});
