@@ -1,20 +1,26 @@
 import "./App.css";
+import ThemeControler from "@/components/ThemeController";
+import SearchInput from "@/components/SearchInput";
+import Filters from "@/components/Filters";
+import Footer from "./components/Footer";
 
 function App() {
   return (
-    <div className="hero bg-base-200 min-h-screen">
-      <div className="hero-content text-center">
-        <div className="max-w-md">
-          <h1 className="text-5xl font-bold">Hello there</h1>
-          <p className="py-6">
-            Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda
-            excepturi exercitationem quasi. In deleniti eaque aut repudiandae et
-            a id nisi.
-          </p>
-          <button className="btn btn-primary">Get Started</button>
+    <>
+      <header className="navbar min-h-10 p-4 shadow-sm">
+        <div className="bg flex w-full justify-between">
+          <a className="btn btn-ghost text-xl">NoozFeed</a>
+          <ThemeControler />
         </div>
-      </div>
-    </div>
+      </header>
+      <main className="h-[calc(100vh-11.25em)] flex-1 overflow-y-auto p-5">
+        <div className="bg bg-base-300 flex w-full justify-between">
+          <SearchInput />
+          <Filters />
+        </div>
+      </main>
+      <Footer />
+    </>
   );
 }
 
