@@ -1,3 +1,5 @@
+export * from "./test";
+
 export interface NewsApiArticle {
   source: {
     id: string | undefined;

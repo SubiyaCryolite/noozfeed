@@ -51,7 +51,9 @@ export interface AppContextType extends AppPreferences {
 /**
  * Where the magic happens
  */
-export type Article = NewsApiArticle;
+export interface Article extends Omit<NewsApiArticle, "author"> {
+  authors: string[];
+}
 
 export interface SearchContextType {
   /**

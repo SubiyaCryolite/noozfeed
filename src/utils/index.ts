@@ -1,5 +1,7 @@
 import { twMerge } from "tailwind-merge";
 import clsx, { ClassValue } from "clsx";
+import { format, parseISO, ParseISOOptions } from "date-fns";
+import { TZDate } from "@date-fns/tz";
 
 import { SearchArgs, SerializableArgs } from "@/interfaces";
 import { FeedType } from "@/constants";
@@ -36,4 +38,26 @@ export const getDefaultValue = (type: FeedType): SearchArgs => {
     defaultValue.sources = saved.sources;
   }
   return defaultValue;
+};
+
+export const printLocalDate = (
+  date: Date,
+  dateFormat = "PP",
+  timeZone: string | undefined = undefined,
+) => {
+  if (!date) {
+    throw new Error("A valid date is required.");
+  }
+  const zonedDate = new TZDate(date, timeZone);
+  return format(zonedDate, dateFormat);
+};
+
+export const parseISODate = (
+  date: string,
+  options: ParseISOOptions<Date> | undefined = undefined,
+) => {
+  if (!date) {
+    throw new Error("A valid date is required.");
+  }
+  return parseISO(date, options);
 };
