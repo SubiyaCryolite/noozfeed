@@ -2,7 +2,6 @@ import "./App.css";
 import { useState } from "react";
 
 import ThemeControler from "@/components/ThemeController";
-import Footer from "@/components/Footer";
 import AppProvider from "@/providers/AppProvider";
 import Feed from "@/components/Feed";
 import Tab from "./components/Tab";
@@ -27,7 +26,7 @@ function App() {
         </div>
       </header>
       <AppProvider>
-        <Tabs border className="h-[calc(100vh-9.75em)] pt-10">
+        <Tabs border className="pt-10">
           <Tab
             name={FeedTabsName}
             className="w-[50%]"
@@ -50,7 +49,7 @@ function App() {
           </Tab>
         </Tabs>
       </AppProvider>
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 }

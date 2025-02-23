@@ -11,7 +11,7 @@ const DataSourceName = "Test";
 
 export const useTestSource = () => {
   const { searchArguments, setStreaming } = use(SearchContext)!;
-  const { updateSources } = use(AppContext)!;
+  const { updateSources, updateMetadata } = use(AppContext)!;
 
   const { data, isLoading } = useSWR<NpmResults>(
     getUrlKey(searchArguments),
@@ -20,20 +20,21 @@ export const useTestSource = () => {
 
   //register this source, happens once
   useEffect(() => {
-    updateSources({ value: DataSourceName, label: "Test Source" });
+    updateSources([{ value: DataSourceName, label: "Test Source" }]);
   }, [updateSources]);
 
   useEffect(() => {
     if (data) {
       const articles: Article[] = transform(data);
+      updateMetadata(articles);
       setStreaming((prevState) => [...prevState, ...articles]);
     }
-  }, [data, setStreaming]);
+  }, [data, setStreaming, updateMetadata]);
 
   return !isLoading;
 };
 
-function getUrlKey(searchArguments: SearchArgs): string | undefined {
+const getUrlKey = (searchArguments: SearchArgs): string | undefined => {
   if (!canUseSource(searchArguments.sources, DataSourceName)) {
     return undefined;
   }
@@ -44,9 +45,9 @@ function getUrlKey(searchArguments: SearchArgs): string | undefined {
   const url = new URL("https://api.npms.io/v2/search");
   url.searchParams.append("q", searchArguments.searcthText);
   return url.toString();
-}
+};
 
-function transform(data: NpmResults): Article[] {
+const transform = (data: NpmResults): Article[] => {
   const results: Article[] = [];
   console.log({ data });
   data.results?.forEach((result) => {
@@ -55,7 +56,6 @@ function transform(data: NpmResults): Article[] {
     article.description = result.package.description;
     article.title = result.package.name;
     article.publishedAt = result.package.date;
-
     result.package.maintainers?.forEach(({ username, email }) => {
       article.authors.push(`${username} <${email}>`);
     });
@@ -65,4 +65,4 @@ function transform(data: NpmResults): Article[] {
     results.push(article);
   });
   return results;
-}
+};

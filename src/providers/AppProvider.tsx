@@ -1,5 +1,12 @@
 import React, { useCallback, useMemo, useState } from "react";
-import { AppContextType, Author, Category, Option, Source } from "@/interfaces";
+import {
+  AppContextType,
+  Article,
+  Author,
+  Category,
+  Option,
+  Source,
+} from "@/interfaces";
 import AppContext from "@/contexts/AppContext";
 import { DEFAULT_CATEGORIES } from "@/constants";
 
@@ -18,16 +25,23 @@ const sortOptions = (a: Option, b: Option): number => {
 };
 
 const update = (
-  option: Option,
+  options: Iterable<Option>,
   setState: React.Dispatch<React.SetStateAction<Option[]>>,
 ) => {
   setState?.((prevState) => {
-    const exists = prevState.findIndex((entry) => (option.value = entry.value));
-    if (exists < 0) {
-      return [...prevState, option].sort(sortOptions);
-    } else {
-      return prevState;
+    const unique: Record<string, Option> = {};
+    for (const option of prevState) {
+      unique[option.value] = option;
     }
+
+    let changes = false;
+    for (const option of options) {
+      if (!unique[option.value]) {
+        changes = true;
+        unique[option.value] = option;
+      }
+    }
+    return changes ? Object.values(unique).sort(sortOptions) : prevState;
   });
 };
 
@@ -36,17 +50,32 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   const [categories, setCategories] = useState<Category[]>(DEFAULT_CATEGORIES);
   const [authors, setAuthors] = useState<Author[]>([]);
 
-  const updateCategories = useCallback((category: Category) => {
+  const updateCategories = useCallback((category: Iterable<Category>) => {
     update(category, setCategories);
   }, []);
 
-  const updateSources = useCallback((source: Source) => {
+  const updateSources = useCallback((source: Iterable<Source>) => {
     update(source, setSources);
   }, []);
 
-  const updateAuthors = useCallback((author: Author) => {
+  const updateAuthors = useCallback((author: Iterable<Author>) => {
     update(author, setAuthors);
   }, []);
+
+  const updateMetadata = useCallback(
+    (articles: Article[]) => {
+      const sourcedCategories = articles
+        .flatMap((article) => article.keywords)
+        .map((keyword) => ({ value: keyword, label: keyword }));
+      if (sourcedCategories.length) updateCategories(sourcedCategories);
+
+      const authors: Author[] = articles
+        .flatMap((article) => article.authors)
+        .map((author) => ({ value: author, label: author }));
+      if (authors.length) updateAuthors(authors);
+    },
+    [updateCategories, updateAuthors],
+  );
 
   const payload = useMemo<AppContextType>(
     () => ({
@@ -56,6 +85,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
       updateSources,
       updateCategories,
       updateAuthors,
+      updateMetadata,
     }),
     [
       sources,
@@ -64,6 +94,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
       updateSources,
       updateCategories,
       updateAuthors,
+      updateMetadata,
     ],
   );
 

@@ -43,9 +43,10 @@ export interface SearchArgs extends SerializableArgs {
 }
 
 export interface AppContextType extends AppPreferences {
-  updateCategories: (category: Category) => void;
-  updateSources: (source: Source) => void;
-  updateAuthors: (author: Author) => void;
+  updateCategories: (category: Iterable<Category>) => void;
+  updateSources: (source: Iterable<Source>) => void;
+  updateAuthors: (author: Iterable<Author>) => void;
+  updateMetadata: (articles: Article[]) => void;
 }
 
 /**
