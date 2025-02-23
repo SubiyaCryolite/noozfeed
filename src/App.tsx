@@ -1,8 +1,10 @@
 import "./App.css";
 import ThemeControler from "@/components/ThemeController";
-import SearchInput from "@/components/SearchInput";
-import Filters from "@/components/Filters";
-import Footer from "./components/Footer";
+import Footer from "@/components/Footer";
+import AppProvider from "@/providers/AppProvider";
+import Feeds from "@/components/Feeds";
+import Tab from "./components/Tab";
+import Tabs from "./components/Tabs";
 
 function App() {
   return (
@@ -13,12 +15,15 @@ function App() {
           <ThemeControler />
         </div>
       </header>
-      <main className="h-[calc(100vh-11.25em)] flex-1 overflow-y-auto p-5">
-        <div className="bg bg-base-300 flex w-full justify-between">
-          <SearchInput />
-          <Filters />
-        </div>
-      </main>
+      <AppProvider>
+        <Tabs border className="pt-10">
+          <Tab className="w-[50%]" active={true}>
+            Your Feed
+          </Tab>
+          <Tab className="w-[50%]">Live Feed</Tab>
+        </Tabs>
+        <Feeds />
+      </AppProvider>
       <Footer />
     </>
   );
