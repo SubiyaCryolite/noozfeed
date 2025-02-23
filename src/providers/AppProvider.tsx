@@ -7,7 +7,7 @@ interface AppProviderProps {
   children: React.ReactNode;
 }
 
-const sortOptions = (a: Option, b: OPtion): number => {
+const sortOptions = (a: Option, b: Option): number => {
   if (a.label < b.label) {
     return -1;
   }

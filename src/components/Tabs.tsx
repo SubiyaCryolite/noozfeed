@@ -8,11 +8,7 @@ interface TabsProps extends React.HTMLProps<HTMLDivElement> {
 
 const Tabs: React.FC<TabsProps> = ({ children, ref, border, className }) => {
   return (
-    <div
-      ref={ref}
-      role="tablist"
-      className={cn("tabs", { "tabs-border": border }, className)}
-    >
+    <div ref={ref} className={cn("tabs", { "tabs-border": border }, className)}>
       {children}
     </div>
   );

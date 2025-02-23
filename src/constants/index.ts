@@ -9,4 +9,10 @@ export const DEFAULT_CATEGORIES: Category[] = [
   { value: "sports", label: "Sports" },
 ];
 
-export type TAB_TYPE = "for_you" | "live_feed";
+/**
+ * TODO move to enums
+ */
+export enum FeedType {
+  You = "for_you",
+  Live = "live_feed",
+}

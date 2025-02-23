@@ -4,18 +4,18 @@ import { useState } from "react";
 import ThemeControler from "@/components/ThemeController";
 import Footer from "@/components/Footer";
 import AppProvider from "@/providers/AppProvider";
-import Feeds from "@/components/Feeds";
+import Feed from "@/components/Feed";
 import Tab from "./components/Tab";
 import Tabs from "./components/Tabs";
 import { FeedType } from "./constants";
 
+const FeedTabsName = "feed.tabs";
+
 function App() {
   const [feed, setFeed] = useState<FeedType>(FeedType.You);
 
-  const handleFeed = (
-    event: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
-  ): void => {
-    setFeed(event.currentTarget.dataset["value"] as FeedType);
+  const handleFeed = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    setFeed(event.target.value as FeedType);
   };
 
   return (
@@ -27,25 +27,29 @@ function App() {
         </div>
       </header>
       <AppProvider>
-        <Tabs border className="pt-10">
+        <Tabs border className="h-[calc(100vh-9.75em)] pt-10">
           <Tab
+            name={FeedTabsName}
             className="w-[50%]"
-            data-value={FeedType.You}
-            active={feed == FeedType.You}
-            onClick={handleFeed}
+            value={FeedType.You}
+            checked={feed == FeedType.You}
+            onChange={handleFeed}
+            label="Your Feed"
           >
-            Your Feed
+            <Feed type={FeedType.You} />
           </Tab>
           <Tab
+            name={FeedTabsName}
             className="w-[50%]"
-            data-value={FeedType.Live}
-            active={feed == FeedType.Live}
-            onClick={handleFeed}
+            value={FeedType.Live}
+            checked={feed == FeedType.Live}
+            onChange={handleFeed}
+            label="Live Feed"
+            defaultChecked
           >
-            Live Feed
+            <Feed type={FeedType.Live} />
           </Tab>
         </Tabs>
-        <Feeds active={feed} />
       </AppProvider>
       <Footer />
     </>
