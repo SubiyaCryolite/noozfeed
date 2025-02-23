@@ -14,9 +14,7 @@ export const SearchProvider: React.FC<SearchProviderProps> = ({
   type,
 }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [searchArguments, setSearchArguments] = useState<SearchArgs>(
-    getDefaultValue(type),
-  );
+  const [filters, setFilters] = useState<SearchArgs>(getDefaultValue(type));
   const [results, setArticles] = useState<Article[]>([]);
   const [streaming, setStreaming] = useState<Article[]>([]);
 
@@ -24,22 +22,22 @@ export const SearchProvider: React.FC<SearchProviderProps> = ({
     setIsLoading(true);
     setArticles([]);
     if (type === FeedType.You) {
-      saveArgs(searchArguments);
+      saveArgs(filters);
     }
-  }, [searchArguments, type]);
+  }, [filters, type]);
 
   const payload = useMemo<SearchContextType>(
     () => ({
       isLoading,
-      searchArguments,
-      setSearchArguments,
+      filters,
+      setFilters,
       results,
       streaming,
       setArticles,
       setStreaming,
       setIsLoading,
     }),
-    [results, isLoading, searchArguments, setSearchArguments, streaming],
+    [results, isLoading, filters, setFilters, streaming],
   );
 
   return <SearchContext value={payload}>{children}</SearchContext>;

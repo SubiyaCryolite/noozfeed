@@ -67,7 +67,7 @@ export interface SearchContextType {
   /**
    * The search arguments that will trigger a search on modification #useEffect
    */
-  searchArguments: SearchArgs;
+  filters: SearchArgs;
 
   /**
    * The aggregated results that will be PAGINATED and SORTED client side
@@ -94,7 +94,7 @@ export interface SearchContextType {
   /**
    * Use this to update search arguments from within context
    */
-  setSearchArguments: React.Dispatch<React.SetStateAction<SearchArgs>>;
+  setFilters: React.Dispatch<React.SetStateAction<SearchArgs>>;
 
   /**
    * Signal loading state when complete

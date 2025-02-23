@@ -10,13 +10,10 @@ import { canUseSource, fetcher, getArticle } from "@/utils";
 const DataSourceName = "Test";
 
 export const useTestSource = () => {
-  const { searchArguments, setStreaming } = use(SearchContext)!;
+  const { filters, setStreaming } = use(SearchContext)!;
   const { updateSources, updateMetadata } = use(AppContext)!;
 
-  const { data, isLoading } = useSWR<NpmResults>(
-    getUrlKey(searchArguments),
-    fetcher,
-  );
+  const { data, isLoading } = useSWR<NpmResults>(getUrlKey(filters), fetcher);
 
   //register this source, happens once
   useEffect(() => {

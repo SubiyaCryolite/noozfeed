@@ -1,69 +1,149 @@
+import { use, useState } from "react";
+import { DayPicker } from "react-day-picker";
+
 import AppContext from "@/contexts/AppContext";
 import SearchContext from "@/contexts/SearchContext";
-import FunnelIcon from "@heroicons/react/24/outline/FunnelIcon";
-import { use } from "react";
+import { printLocalDate } from "@/utils";
+
+const minDate = new Date(1900, 1, 1);
+const today = new Date();
 
 export const Filters: React.FC = () => {
-  const { categories, authors, sources } = use(AppContext)!;
-  const {
-    searchArguments: {
-      categories: categoryArgs,
-      authors: authorArgs,
-      sources: sourceArgs,
-    },
-    setSearchArguments,
-  } = use(SearchContext)!;
+  const [startDate, setStartDate] = useState<Date | undefined>();
+  const [endDate, setEndDate] = useState<Date | undefined>();
 
-  console.log({ categoryArgs, authorArgs, sourceArgs });
+  const app = use(AppContext)!;
+
+  const { filters, setFilters } = use(SearchContext)!;
+
+  //initially load ith user prefs
+  const [categories, setCategories] = useState<Record<string, boolean>>(
+    filters.categories,
+  );
+  const [authors, setAuthors] = useState<Record<string, boolean>>(
+    filters.authors,
+  );
+  const [sources, setSources] = useState<Record<string, boolean>>(
+    filters.sources,
+  );
+
+  function clear() {
+    setStartDate(undefined);
+    setEndDate(undefined);
+    setCategories({});
+    setAuthors({});
+    setSources({});
+  }
+
+  function apply() {
+    setFilters((prevState) => ({
+      ...prevState,
+      startDate,
+      endDate,
+      categories,
+      authors,
+      sources,
+    }));
+  }
+
+  console.log({ filters });
 
   function handleAuthor(event: React.MouseEvent<HTMLLIElement>): void {
     const { active, value } = getFilterArgs(event);
-    setSearchArguments((prevState) => {
-      return {
-        ...prevState,
-        authors: updateArgs(prevState.authors, value, active),
-      };
-    });
+    setAuthors((prevState) => updateArgs(prevState, value, active));
   }
 
   function handleCategory(event: React.MouseEvent<HTMLLIElement>): void {
     const { active, value } = getFilterArgs(event);
-    setSearchArguments((prevState) => {
-      return {
-        ...prevState,
-        categories: updateArgs(prevState.categories, value, active),
-      };
-    });
+    setCategories((prevState) => updateArgs(prevState, value, active));
   }
 
   function handleSource(event: React.MouseEvent<HTMLLIElement>): void {
     const { active, value } = getFilterArgs(event);
-    setSearchArguments((prevState) => {
-      return {
-        ...prevState,
-        sources: updateArgs(prevState.sources, value, active),
-      };
-    });
+    setSources((prevState) => updateArgs(prevState, value, active));
   }
 
   return (
     <div className="join join-vertical sm:join-horizontal">
-      <FunnelIcon
-        className="join-item h-[1em] opacity-50"
-        aria-label="Filters"
-      />
+      <button
+        popoverTarget="rdp-popover-from"
+        className="btn btn-outline join-item"
+        style={{ anchorName: "--rdp-date-from" } as React.CSSProperties}
+      >
+        From
+      </button>
+      <div
+        popover="auto"
+        id="rdp-popover-from"
+        className="dropdown"
+        style={{ positionAnchor: "--rdp-date-from" } as React.CSSProperties}
+      >
+        <DayPicker
+          className="react-day-picker"
+          mode="single"
+          selected={startDate}
+          onSelect={setStartDate}
+          disabled={{
+            before: minDate,
+            ...(endDate && { after: endDate }),
+            ...(!endDate && { after: today }),
+          }}
+          footer={
+            startDate
+              ? `From: ${printLocalDate(startDate)}`
+              : "Pick a start date."
+          }
+        />
+      </div>
+
+      <button
+        popoverTarget="rdp-popover-to"
+        className="btn btn-outline join-item"
+        style={{ anchorName: "--rdp-date-to" } as React.CSSProperties}
+      >
+        To
+      </button>
+      <div
+        popover="auto"
+        id="rdp-popover-to"
+        className="dropdown"
+        style={{ positionAnchor: "--rdp-date-to" } as React.CSSProperties}
+      >
+        <DayPicker
+          className="react-day-picker"
+          mode="single"
+          disabled={{
+            after: today,
+            ...(startDate && { before: startDate }),
+          }}
+          selected={endDate}
+          onSelect={setEndDate}
+          footer={
+            endDate ? `To: ${printLocalDate(endDate)}` : "Pick an end date."
+          }
+        />
+      </div>
 
       <div className="dropdown dropdown-start">
-        <button className="btn btn-outline join-item">Author</button>
+        <button className="btn btn-outline join-item">
+          Author
+          {/* <div
+            className={cn("badge badge-sm badge-secondary", {
+              invisible: !numAuthors.current,
+            })}
+          >
+            {numAuthors.current}
+          </div> */}
+        </button>
         <div className="dropdown-content menu bg-base-100 rounded-box overflow-x-none z-1 max-h-160 w-72 overflow-x-clip overflow-y-auto p-2 shadow-sm">
           <ul tabIndex={0} className="w-full">
-            {authors.map(({ label, value }, i) => (
+            {app.authors.map(({ label, value }, i) => (
               <li
                 onClick={handleAuthor}
                 data-value={value}
-                data-active={authorArgs[value]}
+                data-active={authors[value]}
                 key={`author-${i}-${value}`}
-                className={authorArgs[value] ? "bg-violet-600" : ""}
+                className={authors[value] ? "bg-violet-600" : ""}
               >
                 <a>{label}</a>
               </li>
@@ -72,19 +152,17 @@ export const Filters: React.FC = () => {
         </div>
       </div>
 
-      <button className="btn btn-outline join-item">Date</button>
-
       <div className="dropdown dropdown-start">
         <button className="btn btn-outline join-item">Category</button>
         <div className="dropdown-content menu bg-base-100 rounded-box overflow-x-none z-1 max-h-160 w-56 overflow-x-clip overflow-y-auto p-2 shadow-sm">
           <ul tabIndex={0}>
-            {categories.map(({ label, value }, i) => (
+            {app.categories.map(({ label, value }, i) => (
               <li
                 onClick={handleCategory}
                 data-value={value}
-                data-active={categoryArgs[value]}
+                data-active={categories[value]}
                 key={`category-${i}-${value}`}
-                className={categoryArgs[value] ? "bg-violet-600" : ""}
+                className={categories[value] ? "bg-violet-600" : ""}
               >
                 <a>{label}</a>
               </li>
@@ -97,13 +175,13 @@ export const Filters: React.FC = () => {
         <button className="btn btn-outline join-item">Sources</button>
         <div className="dropdown-content menu bg-base-100 rounded-box overflow-x-none z-1 max-h-160 w-56 overflow-x-clip overflow-y-auto p-2 shadow-sm">
           <ul tabIndex={0}>
-            {sources.map(({ label, value }, i) => (
+            {app.sources.map(({ label, value }, i) => (
               <li
                 onClick={handleSource}
                 data-value={value}
-                data-active={sourceArgs[value]}
+                data-active={sources[value]}
                 key={`source-${i}-${value}`}
-                className={sourceArgs[value] ? "bg-violet-600" : ""}
+                className={sources[value] ? "bg-violet-600" : ""}
               >
                 <a>{label}</a>
               </li>
@@ -112,8 +190,12 @@ export const Filters: React.FC = () => {
         </div>
       </div>
 
-      <button className="btn join-item btn-secondary">Clear</button>
-      <button className="btn join-item btn-primary">Apply</button>
+      <button className="btn join-item btn-secondary" onClick={clear}>
+        Clear
+      </button>
+      <button className="btn join-item btn-primary" onClick={apply}>
+        Apply
+      </button>
     </div>
   );
 };

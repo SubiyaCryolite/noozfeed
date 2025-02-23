@@ -11,19 +11,19 @@ export const SearchInput: React.FC = () => {
     debounce(event.target.value);
   };
 
-  const { setSearchArguments } = use(SearchContext)!;
+  const { setFilters } = use(SearchContext)!;
 
   const debounce = useCallback(
     (debouncedValue: string) => {
       clearTimeout(timerRef.current);
       timerRef.current = setTimeout(() => {
-        setSearchArguments((prevState) => ({
+        setFilters((prevState) => ({
           ...prevState,
           searcthText: debouncedValue,
         }));
       }, 1000);
     },
-    [setSearchArguments],
+    [setFilters],
   );
 
   //edge case, but necessary
