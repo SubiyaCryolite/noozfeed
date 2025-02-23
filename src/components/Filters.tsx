@@ -3,14 +3,14 @@ import FunnelIcon from "@heroicons/react/24/outline/FunnelIcon";
 import { use } from "react";
 
 export const Filters: React.FC = () => {
-  const { categories, authors } = use(AppContext);
+  const { categories, authors } = use(AppContext)!;
 
   const dummyAuthorFunc = () => {
-    //use this to toggle the current contexts author filter
+    //TODO use this to toggle the current contexts author filter
   };
 
   const dummyCategoryFunc = () => {
-    //use this to toggle the current contexts category filter
+    //TODO use this to toggle the current contexts category filter
   };
 
   return (

@@ -11,7 +11,7 @@ export const SearchInput: React.FC = () => {
     debounce(event.target.value);
   };
 
-  const { setSearchArguments } = use(SearchContext);
+  const { setSearchArguments } = use(SearchContext)!;
 
   const debounce = useCallback(
     (debouncedValue: string) => {

@@ -52,6 +52,7 @@ export interface AppContextType extends AppPreferences {
  * Where the magic happens
  */
 export interface Article extends NewsApiArticle {
+  uuid: string;
   authors: string[];
   keywords: string[];
 }

@@ -1,9 +1,9 @@
-import { SearchContextType } from "@/interfaces";
-import { useEffect } from "react";
+import { use, useEffect } from "react";
 import { useTestSource } from "./test";
+import SearchContext from "@/contexts/SearchContext";
 
-export const useDataSources = (payload: SearchContextType) => {
-  const { setArticles, streaming, setIsLoading } = payload;
+export const useDataSources = () => {
+  const { setArticles, streaming, setIsLoading } = use(SearchContext)!;
 
   const isTestDone = useTestSource();
   // TODO const isBbcDone = useTestSource();

@@ -45,7 +45,6 @@ function App() {
             checked={feed == FeedType.Live}
             onChange={handleFeed}
             label="Live Feed"
-            defaultChecked
           >
             <Feed type={FeedType.Live} />
           </Tab>

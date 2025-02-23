@@ -2,6 +2,7 @@ import SearchInput from "@/components/SearchInput";
 import Filters from "@/components/Filters";
 import { FeedType } from "@/constants";
 import SearchProvider from "@/providers/SearchProvider";
+import Results from "./Results";
 
 interface FeedProps {
   type: FeedType;
@@ -15,15 +16,7 @@ export const Feed: React.FC<FeedProps> = ({ type }) => {
           <SearchInput />
           <Filters />
         </div>
-        <div className="bg bg-base-400 flex w-full justify-between">
-          Table controls here
-        </div>
-        <div className="bg bg-base-400 flex w-full justify-between">
-          Table content here
-        </div>
-        <div className="bg bg-base-400 flex w-full justify-between">
-          Table pagination here
-        </div>
+        <Results />
       </main>
     </SearchProvider>
   );

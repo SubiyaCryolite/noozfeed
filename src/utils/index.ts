@@ -2,7 +2,7 @@ import { twMerge } from "tailwind-merge";
 import clsx, { ClassValue } from "clsx";
 import { format, parseISO, ParseISOOptions } from "date-fns";
 import { TZDate } from "@date-fns/tz";
-import useSWR, { SWRResponse, Fetcher } from "swr";
+import { v4 as uuid } from "uuid";
 
 import { Article, SearchArgs, SerializableArgs } from "@/interfaces";
 import { FeedType } from "@/constants";
@@ -77,6 +77,7 @@ export const canUseSource = (
 };
 
 export const getArticle = (): Article => ({
+  uuid: uuid().toString(),
   authors: [],
   keywords: [],
   source: {

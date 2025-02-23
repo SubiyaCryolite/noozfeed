@@ -1,16 +1,17 @@
+import { use, useEffect } from "react";
+import useSWR from "swr";
+
 import AppContext from "@/contexts/AppContext";
 import SearchContext from "@/contexts/SearchContext";
 import { Article, SearchArgs } from "@/interfaces";
 import { NpmResults } from "@/interfaces/external";
 import { canUseSource, fetcher, getArticle } from "@/utils";
-import { use, useEffect } from "react";
-import useSWR from "swr";
 
 const DataSourceName = "Test";
 
 export const useTestSource = () => {
-  const { searchArguments, setStreaming } = use(SearchContext);
-  const { updateSources } = use(AppContext);
+  const { searchArguments, setStreaming } = use(SearchContext)!;
+  const { updateSources } = use(AppContext)!;
 
   const { data, isLoading } = useSWR<NpmResults>(
     getUrlKey(searchArguments),
@@ -36,18 +37,31 @@ function getUrlKey(searchArguments: SearchArgs): string | undefined {
   if (!canUseSource(searchArguments.sources, DataSourceName)) {
     return undefined;
   }
+  if (!searchArguments.searcthText?.length) {
+    return undefined; //invalid args
+  }
 
   const url = new URL("https://api.npms.io/v2/search");
-  if (searchArguments.searcthText)
-    url.searchParams.append("q", searchArguments.searcthText);
+  url.searchParams.append("q", searchArguments.searcthText);
   return url.toString();
 }
 
 function transform(data: NpmResults): Article[] {
   const results: Article[] = [];
-  data.results.forEach((result) => {
+  console.log({ data });
+  data.results?.forEach((result) => {
     const article = getArticle();
-    article.keywords = [...result.package.keywords];
+    article.source.name = DataSourceName;
+    article.description = result.package.description;
+    article.title = result.package.name;
+    article.publishedAt = result.package.date;
+
+    result.package.maintainers?.forEach(({ username, email }) => {
+      article.authors.push(`${username} <${email}>`);
+    });
+    result.package.keywords?.forEach((keyword) => {
+      article.keywords.push(keyword);
+    });
     results.push(article);
   });
   return results;
