@@ -12,6 +12,7 @@ export const useDataSources = () => {
 
   useEffect(() => {
     const allComplete = isTestDone;
+    console.log({ isTestDone });
     if (allComplete) {
       setIsLoading(false);
       setArticles(streaming);

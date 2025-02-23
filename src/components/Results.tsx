@@ -9,7 +9,6 @@ const Results: React.FC = () => {
   const { streaming, results, isLoading } = use(SearchContext)!;
 
   const items = isLoading ? streaming : results;
-
   //react table here
 
   return (
@@ -22,7 +21,7 @@ const Results: React.FC = () => {
       </div>
       <div className="bg bg-base-400 flex grid w-full grid-cols-1 justify-between gap-4 overflow-y-auto md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {items.map((item) => (
-          <ArticleCard key={item.uuid} article={item} />
+          <ArticleCard key={item.uuid} article={item} skeleton={isLoading} />
         ))}
       </div>
     </>

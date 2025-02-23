@@ -26,7 +26,7 @@ function App() {
         </div>
       </header>
       <AppProvider>
-        <Tabs border className="pt-10">
+        <Tabs border className="pt-0">
           <Tab
             name={FeedTabsName}
             className="w-[50%]"

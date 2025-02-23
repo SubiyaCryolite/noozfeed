@@ -21,6 +21,7 @@ export const SearchProvider: React.FC<SearchProviderProps> = ({
   useEffect(() => {
     setIsLoading(true);
     setArticles([]);
+    setStreaming([]);
     if (type === FeedType.You) {
       saveArgs(filters);
     }

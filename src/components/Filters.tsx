@@ -3,10 +3,34 @@ import { DayPicker } from "react-day-picker";
 
 import AppContext from "@/contexts/AppContext";
 import SearchContext from "@/contexts/SearchContext";
-import { printLocalDate } from "@/utils";
+import { cn, printLocalDate } from "@/utils";
 
 const minDate = new Date(1900, 1, 1);
 const today = new Date();
+
+interface FilterOptionProps extends React.HTMLProps<HTMLLIElement> {
+  value: string;
+  active: boolean;
+}
+
+const FilterOption: React.FC<FilterOptionProps> = ({
+  value,
+  active,
+  children,
+  className,
+  ...props
+}) => {
+  return (
+    <li
+      data-value={value}
+      data-active={active}
+      className={cn(active ? "bg-neutral text-neutral-content" : "", className)}
+      {...props}
+    >
+      {children}
+    </li>
+  );
+};
 
 export const Filters: React.FC = () => {
   const [startDate, setStartDate] = useState<Date | undefined>();
@@ -46,8 +70,6 @@ export const Filters: React.FC = () => {
     }));
   }
 
-  console.log({ filters });
-
   function handleAuthor(event: React.MouseEvent<HTMLLIElement>): void {
     const { active, value } = getFilterArgs(event);
     setAuthors((prevState) => updateArgs(prevState, value, active));
@@ -75,7 +97,7 @@ export const Filters: React.FC = () => {
       <div
         popover="auto"
         id="rdp-popover-from"
-        className="dropdown"
+        className="dropdown shadow-sm"
         style={{ positionAnchor: "--rdp-date-from" } as React.CSSProperties}
       >
         <DayPicker
@@ -106,7 +128,7 @@ export const Filters: React.FC = () => {
       <div
         popover="auto"
         id="rdp-popover-to"
-        className="dropdown"
+        className="dropdown shadow-sm"
         style={{ positionAnchor: "--rdp-date-to" } as React.CSSProperties}
       >
         <DayPicker
@@ -138,15 +160,14 @@ export const Filters: React.FC = () => {
         <div className="dropdown-content menu bg-base-100 rounded-box overflow-x-none z-1 max-h-160 w-72 overflow-x-clip overflow-y-auto p-2 shadow-sm">
           <ul tabIndex={0} className="w-full">
             {app.authors.map(({ label, value }, i) => (
-              <li
+              <FilterOption
                 onClick={handleAuthor}
-                data-value={value}
-                data-active={authors[value]}
+                value={value}
+                active={authors[value]}
                 key={`author-${i}-${value}`}
-                className={authors[value] ? "bg-violet-600" : ""}
               >
                 <a>{label}</a>
-              </li>
+              </FilterOption>
             ))}
           </ul>
         </div>
@@ -157,15 +178,14 @@ export const Filters: React.FC = () => {
         <div className="dropdown-content menu bg-base-100 rounded-box overflow-x-none z-1 max-h-160 w-56 overflow-x-clip overflow-y-auto p-2 shadow-sm">
           <ul tabIndex={0}>
             {app.categories.map(({ label, value }, i) => (
-              <li
+              <FilterOption
                 onClick={handleCategory}
-                data-value={value}
-                data-active={categories[value]}
+                value={value}
+                active={categories[value]}
                 key={`category-${i}-${value}`}
-                className={categories[value] ? "bg-violet-600" : ""}
               >
                 <a>{label}</a>
-              </li>
+              </FilterOption>
             ))}
           </ul>
         </div>
@@ -176,15 +196,14 @@ export const Filters: React.FC = () => {
         <div className="dropdown-content menu bg-base-100 rounded-box overflow-x-none z-1 max-h-160 w-56 overflow-x-clip overflow-y-auto p-2 shadow-sm">
           <ul tabIndex={0}>
             {app.sources.map(({ label, value }, i) => (
-              <li
+              <FilterOption
                 onClick={handleSource}
-                data-value={value}
-                data-active={sources[value]}
+                value={value}
+                active={sources[value]}
                 key={`source-${i}-${value}`}
-                className={sources[value] ? "bg-violet-600" : ""}
               >
                 <a>{label}</a>
-              </li>
+              </FilterOption>
             ))}
           </ul>
         </div>

@@ -46,13 +46,15 @@ const getUrlKey = (searchArguments: SearchArgs): string | undefined => {
 
 const transform = (data: NpmResults): Article[] => {
   const results: Article[] = [];
-  console.log({ data });
   data.results?.forEach((result) => {
     const article = getArticle();
+    article.uuid = `${result.package.date}-${DataSourceName}-${result.package.name}`;
     article.source.name = DataSourceName;
     article.description = result.package.description;
     article.title = result.package.name;
     article.publishedAt = result.package.date;
+    article.urlToImage =
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Npm-logo.svg/640px-Npm-logo.svg.png";
     result.package.maintainers?.forEach(({ username, email }) => {
       article.authors.push(`${username} <${email}>`);
     });
