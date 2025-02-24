@@ -43,7 +43,7 @@ SImply run `docker stop take-home-ifunga`
 - No Jest unit tests were added due to time constraints
   - Thats said the use of Contexts and Hooks would make mocking and verifying behaviour and edge cases smooth
 - Client side filtering and sorting could be implemented via Tanstack Table. Not done due to time constraints
--
+- The News API is throttled daily, so any errors may be as a result of that.
 
 # known Issues
 
