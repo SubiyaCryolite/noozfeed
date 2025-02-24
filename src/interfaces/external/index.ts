@@ -1,5 +1,3 @@
-export * from "./test";
-
 export interface BaseArticle {
   title: string | undefined;
   description: string | undefined;

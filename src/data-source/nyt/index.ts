@@ -57,8 +57,8 @@ export const getNytTransformer = (data: NytResults): Article[] => {
     article.description = result.snippet;
     article.title = result.headline.main;
     article.publishedAt = result.pub_date;
-    article.publication.id = "nyt";
-    article.publication.name = "The New York Times";
+    article.publication.value = "nyt";
+    article.publication.label = "The New York Times";
     article.authors.push(result.byline.original);
     result.multimedia.forEach(({ url, subType, type }) => {
       if (type === "image" && subType === "googleFourByThree") {

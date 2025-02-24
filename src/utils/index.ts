@@ -83,8 +83,8 @@ export const getArticle = (): Article => ({
   authors: [],
   keywords: [],
   publication: {
-    id: undefined,
-    name: undefined,
+    value: "",
+    label: "",
   },
   title: undefined,
   description: undefined,

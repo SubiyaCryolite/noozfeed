@@ -47,10 +47,11 @@ const ArticleCard: React.FC<ArticleCardProps> = ({
           <div className={cn("card-actions mt-4 justify-end")}>
             <span
               className={cn("badge badge-secondary mr-auto", {
-                "badge-outline": !filters.publications[article.publication.id!],
+                "badge-outline":
+                  !filters.publications[article.publication.value!],
               })}
             >
-              {article.publication.name}
+              {article.publication.label}
             </span>
             <span className="badge badge-outline">Fashion</span>
             <span className="badge badge-outline">Products</span>

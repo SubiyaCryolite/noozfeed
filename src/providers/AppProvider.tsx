@@ -84,9 +84,9 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
       if (authors.length) updateAuthors(authors);
 
       const publications: Publication[] = articles.map(
-        ({ publication: { id, name } }) => ({
-          value: (id ?? name)!,
-          label: name!,
+        ({ publication: { value, label } }) => ({
+          value,
+          label,
         }),
       );
       if (publications.length) updatePublications(publications);
