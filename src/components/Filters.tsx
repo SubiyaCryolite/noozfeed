@@ -3,11 +3,8 @@ import { DayPicker } from "react-day-picker";
 
 import AppContext from "@/contexts/AppContext";
 import SearchContext from "@/contexts/SearchContext";
-import ChevronUpIcon from "@heroicons/react/24/outline/ChevronUpIcon";
-import ChevronDownIcon from "@heroicons/react/24/outline/ChevronDownIcon";
 import MagnifyingGlassIcon from "@heroicons/react/24/outline/MagnifyingGlassIcon";
 import XMarkIcon from "@heroicons/react/24/outline/XMarkIcon";
-import EyeSlashIcon from "@heroicons/react/24/outline/EyeSlashIcon";
 import Cog8ToothIcon from "@heroicons/react/24/outline/Cog8ToothIcon";
 import { cn, printLocalDate } from "@/utils";
 
