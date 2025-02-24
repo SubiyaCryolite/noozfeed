@@ -24,13 +24,13 @@ export const getGuardianUrl = (filters: SearchArgs): string | undefined => {
   if (filters.endDate) {
     url.searchParams.append("to-date", filters.endDate.toISOString());
   }
-  const categories: string[] = [];
-  Object.entries(filters.categories).forEach(([key, active]) => {
-    if (active) categories.push(key);
-  });
-  if (categories.length === 1) {
-    //only one category allowed
-    url.searchParams.append("section", categories[0]);
+
+  //Can only filter by category
+  const categories = Object.entries(filters.categories)
+    .filter(([, active]) => active)
+    .map(([key]) => key);
+  if (categories.length) {
+    url.searchParams.append("section", categories.join("|"));
   }
 
   if (url.searchParams.size === 0) {
