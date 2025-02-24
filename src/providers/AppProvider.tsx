@@ -5,6 +5,7 @@ import {
   Author,
   Category,
   Option,
+  Publication,
   Source,
 } from "@/interfaces";
 import AppContext from "@/contexts/AppContext";
@@ -49,6 +50,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   const [sources, setSources] = useState<Source[]>([]);
   const [categories, setCategories] = useState<Category[]>(DEFAULT_CATEGORIES);
   const [authors, setAuthors] = useState<Author[]>([]);
+  const [publications, setPublications] = useState<Publication[]>([]);
 
   const updateCategories = useCallback((category: Iterable<Category>) => {
     update(category, setCategories);
@@ -62,6 +64,13 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     update(author, setAuthors);
   }, []);
 
+  const updatePublications = useCallback(
+    (publications: Iterable<Publication>) => {
+      update(publications, setPublications);
+    },
+    [],
+  );
+
   const updateMetadata = useCallback(
     (articles: Article[]) => {
       const sourcedCategories = articles
@@ -73,8 +82,16 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
         .flatMap((article) => article.authors)
         .map((author) => ({ value: author, label: author }));
       if (authors.length) updateAuthors(authors);
+
+      const publications: Publication[] = articles.map(
+        ({ publication: { id, name } }) => ({
+          value: (id ?? name)!,
+          label: name!,
+        }),
+      );
+      if (publications.length) updatePublications(publications);
     },
-    [updateCategories, updateAuthors],
+    [updateCategories, updateAuthors, updatePublications],
   );
 
   const payload = useMemo<AppContextType>(
@@ -82,9 +99,11 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
       sources,
       categories,
       authors,
+      publications,
       updateSources,
       updateCategories,
       updateAuthors,
+      updatePublications,
       updateMetadata,
     }),
     [
@@ -92,6 +111,8 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
       categories,
       authors,
       updateSources,
+      publications,
+      updatePublications,
       updateCategories,
       updateAuthors,
       updateMetadata,

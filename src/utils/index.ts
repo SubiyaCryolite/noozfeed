@@ -18,7 +18,7 @@ export const loadArgs = (): SerializableArgs => {
   if (json) {
     return JSON.parse(json) as SerializableArgs;
   }
-  return { sources: {}, categories: {}, authors: {} };
+  return { sources: {}, categories: {}, authors: {}, publications: {} };
 };
 
 export const saveArgs = (value: SerializableArgs) => {
@@ -31,12 +31,14 @@ export const getDefaultValue = (type: FeedType): SearchArgs => {
     sources: {},
     categories: {},
     authors: {},
+    publications: {},
   };
   if (type === FeedType.You) {
     const saved = loadArgs();
     defaultValue.authors = saved.authors;
     defaultValue.categories = saved.categories;
     defaultValue.sources = saved.sources;
+    defaultValue.publications = saved.publications;
   }
   return defaultValue;
 };
@@ -80,7 +82,7 @@ export const getArticle = (): Article => ({
   uuid: uuid().toString(),
   authors: [],
   keywords: [],
-  source: {
+  publication: {
     id: undefined,
     name: undefined,
   },
@@ -89,5 +91,4 @@ export const getArticle = (): Article => ({
   url: undefined,
   urlToImage: undefined,
   publishedAt: undefined,
-  author: undefined,
 });

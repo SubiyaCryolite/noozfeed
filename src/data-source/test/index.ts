@@ -49,7 +49,8 @@ const transform = (data: NpmResults): Article[] => {
   data.results?.forEach((result) => {
     const article = getArticle();
     article.uuid = `${result.package.date}-${DataSourceName}-${result.package.name}`;
-    article.source.name = DataSourceName;
+    article.publication.id = "test.id.zz";
+    article.publication.name = "Test";
     article.description = result.package.description;
     article.title = result.package.name;
     article.publishedAt = result.package.date;

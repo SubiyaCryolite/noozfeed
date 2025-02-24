@@ -50,6 +50,9 @@ export const Filters: React.FC = () => {
   const [sources, setSources] = useState<Record<string, boolean>>(
     filters.sources,
   );
+  const [publications, setPublications] = useState<Record<string, boolean>>(
+    filters.publications,
+  );
 
   function clear() {
     setStartDate(undefined);
@@ -57,6 +60,7 @@ export const Filters: React.FC = () => {
     setCategories({});
     setAuthors({});
     setSources({});
+    setPublications({});
   }
 
   function apply() {
@@ -67,6 +71,7 @@ export const Filters: React.FC = () => {
       categories,
       authors,
       sources,
+      publications,
     }));
   }
 
@@ -83,6 +88,11 @@ export const Filters: React.FC = () => {
   function handleSource(event: React.MouseEvent<HTMLLIElement>): void {
     const { active, value } = getFilterArgs(event);
     setSources((prevState) => updateArgs(prevState, value, active));
+  }
+
+  function handlePublication(event: React.MouseEvent<HTMLLIElement>): void {
+    const { active, value } = getFilterArgs(event);
+    setPublications((prevState) => updateArgs(prevState, value, active));
   }
 
   return (
@@ -183,6 +193,24 @@ export const Filters: React.FC = () => {
                 value={value}
                 active={categories[value]}
                 key={`category-${i}-${value}`}
+              >
+                <a>{label}</a>
+              </FilterOption>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      <div className="dropdown dropdown-start">
+        <button className="btn btn-outline join-item">Publications</button>
+        <div className="dropdown-content menu bg-base-100 rounded-box overflow-x-none z-1 max-h-160 w-56 overflow-x-clip overflow-y-auto p-2 shadow-sm">
+          <ul tabIndex={0}>
+            {app.publications.map(({ label, value }, i) => (
+              <FilterOption
+                onClick={handlePublication}
+                value={value}
+                active={publications[value]}
+                key={`publication-${i}-${value}`}
               >
                 <a>{label}</a>
               </FilterOption>

@@ -1,4 +1,4 @@
-import { NewsApiArticle } from "./external";
+import { BaseArticle } from "./external";
 
 export interface Option {
   value: string;
@@ -11,10 +11,13 @@ export type Category = Option;
 
 export type Author = Option;
 
+export type Publication = Option;
+
 export interface AppPreferences {
   sources: Source[];
   categories: Category[];
   authors: Author[];
+  publications: Author[];
 }
 
 export interface Filter {
@@ -29,6 +32,7 @@ export interface SerializableArgs {
   sources: Record<string, boolean>;
   categories: Record<string, boolean>;
   authors: Record<string, boolean>;
+  publications: Record<string, boolean>;
 }
 
 /**
@@ -46,16 +50,21 @@ export interface AppContextType extends AppPreferences {
   updateCategories: (category: Iterable<Category>) => void;
   updateSources: (source: Iterable<Source>) => void;
   updateAuthors: (author: Iterable<Author>) => void;
+  updatePublications: (category: Iterable<Publication>) => void;
   updateMetadata: (articles: Article[]) => void;
 }
 
 /**
  * Where the magic happens
  */
-export interface Article extends NewsApiArticle {
+export interface Article extends BaseArticle {
   uuid: string;
   authors: string[];
   keywords: string[];
+  publication: {
+    id: string | undefined;
+    name: string | undefined;
+  };
 }
 
 export interface SearchContextType {
