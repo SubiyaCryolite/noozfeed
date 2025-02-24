@@ -39,6 +39,7 @@ export const getNewsApiTransformer = (data: NewsApiResults): Article[] => {
   data.articles?.forEach((result) => {
     const article = getArticle();
     article.uuid = `${result.publishedAt}-${DataSourceName}-${result.title}`;
+    article.url = result.url;
     article.description = result.description;
     article.title = result.title;
     article.publishedAt = result.publishedAt;

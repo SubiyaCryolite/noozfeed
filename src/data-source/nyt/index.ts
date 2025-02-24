@@ -63,6 +63,7 @@ export const getNytTransformer = (data: NytResults): Article[] => {
   data.response.docs.forEach((result) => {
     const article = getArticle();
     article.uuid = result._id;
+    article.url = result.web_url;
     article.description = result.snippet;
     article.title = result.headline.main;
     article.publishedAt = result.pub_date;

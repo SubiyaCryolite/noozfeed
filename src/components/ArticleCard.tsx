@@ -1,4 +1,5 @@
 import { use } from "react";
+import LinkIcon from "@heroicons/react/24/outline/LinkIcon";
 
 import SearchContext from "@/contexts/SearchContext";
 import { Article } from "@/interfaces";
@@ -39,6 +40,13 @@ const ArticleCard: React.FC<ArticleCardProps> = ({
             })}
           >
             <span className="truncate">{article.title}</span>
+            {article.url && (
+              <span className="btn btn-circle ml-auto">
+                <a href={article.url} target="_blank" rel="noreferrer nofollow">
+                  <LinkIcon className="size-4" />
+                </a>
+              </span>
+            )}
           </h2>
           <div className="text-color-base-200 w-full items-baseline">
             <span>{printLocalDate(parseISODate(article.publishedAt!))}</span>

@@ -49,6 +49,7 @@ export const getGuardianTransformer = (data: GuardianResults): Article[] => {
   data.response.results.forEach((result) => {
     const article = getArticle();
     article.uuid = result.id;
+    article.url = result.webUrl;
     article.description = result.fields.trailText;
     article.title = result.fields.headline;
     article.publishedAt = result.webPublicationDate;
