@@ -37,7 +37,7 @@ const FilterOption: React.FC<FilterOptionProps> = ({
 
 export const Filters: React.FC = () => {
   const [startDate, setStartDate] = useState<Date | undefined>();
-  const [endDate, setEndDate] = useState<Date | undefined>();
+  const [endDate, setEndDate] = useState<Date | undefined>(new Date());
 
   const app = use(AppContext)!;
 

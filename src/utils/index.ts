@@ -26,12 +26,13 @@ export const saveArgs = (value: SerializableArgs) => {
 };
 
 export const getDefaultValue = (type: FeedType): SearchArgs => {
-  const defaultValue = {
+  const defaultValue: SearchArgs = {
     searcthText: "",
     sources: {},
     categories: {},
     authors: {},
     publications: {},
+    endDate: new Date(),
   };
   if (type === FeedType.You) {
     const saved = loadArgs();
