@@ -15,6 +15,8 @@ import useExternalSource from "./base";
 import { NpmResults } from "@/interfaces/external";
 import { NewsApiResults } from "@/interfaces/external/news-api";
 import { GuardianResults } from "@/interfaces/external/guardian";
+import { NytResults } from "@/interfaces/external/nyt";
+import { NytDataSource, getNytTransformer, getNytUrl } from "./nyt";
 
 export const useDataSources = () => {
   const { setArticles, streaming, setIsLoading } = use(SearchContext)!;
@@ -25,11 +27,11 @@ export const useDataSources = () => {
     getTestTransformer,
   );
 
-  // const isNewsApiDone = useExternalSource<NewsApiResults>(
-  //   NewsApiDataSource,
-  //   getNewsApiUrl,
-  //   getNewsApiTransformer,
-  // );
+  const isNewsApiDone = useExternalSource<NewsApiResults>(
+    NewsApiDataSource,
+    getNewsApiUrl,
+    getNewsApiTransformer,
+  );
 
   const isGuardianDone = useExternalSource<GuardianResults>(
     GuardianDataSource,
@@ -37,12 +39,27 @@ export const useDataSources = () => {
     getGuardianTransformer,
   );
 
+  const isNytSource = useExternalSource<NytResults>(
+    NytDataSource,
+    getNytUrl,
+    getNytTransformer,
+  );
+
   useEffect(() => {
-    const allComplete = isGuardianDone && isTestDone;
-    console.log({ isGuardianDone, isTestDone });
+    const allComplete =
+      isGuardianDone && isTestDone && isNewsApiDone && isNytSource;
+    console.log({ isGuardianDone, isTestDone, isNewsApiDone, isNytSource });
     if (allComplete) {
       setIsLoading(false);
       setArticles(streaming);
     }
-  }, [setIsLoading, setArticles, streaming, isTestDone, isGuardianDone]);
+  }, [
+    setIsLoading,
+    setArticles,
+    streaming,
+    isTestDone,
+    isNewsApiDone,
+    isGuardianDone,
+    isNytSource,
+  ]);
 };
