@@ -65,13 +65,8 @@ export const getNytTransformer = (data: NytResults): Article[] => {
         article.urlToImage = `https://static01.nyt.com/${url}`;
       }
     });
-    result.keywords.forEach((keyword) => {
-      article.categories.push({
-        value: keyword.value!,
-        label: keyword.name!,
-      });
-    });
-
+    article.category.value = result.news_desk.toLocaleLowerCase();
+    article.category.label = result.news_desk;
     results.push(article);
   });
   return results;

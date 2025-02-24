@@ -57,10 +57,8 @@ export const getGuardianTransformer = (data: GuardianResults): Article[] => {
     article.publication.value = "guardian";
     article.publication.label = "The Guardian";
     article.authors.push(result.fields.byline);
-    article.categories.push({
-      value: result.sectionId,
-      label: result.sectionName,
-    });
+    article.category.value = result.sectionId;
+    article.category.label = result.sectionName;
     results.push(article);
   });
   return results;

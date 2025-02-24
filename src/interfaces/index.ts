@@ -61,7 +61,7 @@ export interface Article extends BaseArticle {
   uuid: string;
   authors: string[]; //array of options
   keywords: string[]; //remove
-  categories: Option[]; //singular
+  category: Option; //singular
   publication: Option; //singular
 }
 

@@ -49,9 +49,10 @@ export const getNewsApiTransformer = (data: NewsApiResults): Article[] => {
     article.title = result.title;
     article.publishedAt = result.publishedAt;
     article.urlToImage = result.urlToImage;
-    article.publication.value =
-      (result.source.id ?? result.source.name) || "unknown";
-    article.publication.label = result.source.name || "Unknown";
+    if (result.source.name) {
+      article.publication.value = result.source.name.toLowerCase();
+      article.publication.label = result.source.name;
+    }
     if (result.author) article.authors.push(result.author);
     results.push(article);
   });

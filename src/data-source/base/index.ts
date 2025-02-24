@@ -17,7 +17,6 @@ export const useExternalSource = <T>(
   const { updateSources, updateMetadata } = use(AppContext)!;
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const abortControllerRef = useRef<AbortController>(null);
-  const key = getUrl(filters);
 
   useEffect(() => {
     setIsLoading(true);
@@ -27,6 +26,7 @@ export const useExternalSource = <T>(
     abortControllerRef.current = new AbortController();
     const { signal } = abortControllerRef.current;
 
+    const key = getUrl(filters);
     if (key) {
       axios
         .get<T>(key, {
@@ -50,7 +50,7 @@ export const useExternalSource = <T>(
     } else {
       setIsLoading(false);
     }
-  }, [key, setStreaming, updateMetadata, transformer]);
+  }, [filters, setStreaming, updateMetadata, transformer, getUrl]);
 
   /**
    * Cleanup
