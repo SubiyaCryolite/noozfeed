@@ -27,3 +27,25 @@ SImply run `docker stop take-home-ifunga`
 - Open this project from the root directory
 - Run `npm install` at least once
 - Run `npm run dev`, this will load the demo at [http://localhost:9000](http://localhost:9000) by default
+
+# Design
+
+- The project relies on Local Storage for persistence
+- All endpoints support date range and query filtering
+- Data sources can be enabled or disabled by clicking on the gear icon
+- Only 3 data sources configured, though as demonstrated through the implementation in more could be easily
+  - Only NYT supports filtering by category/section
+  - Only NYT support filtering by publication
+- Responsive design was tested in browser emulation
+
+# Constraints
+
+- No Jest unit tests were added due to time constraints
+  - Thats said the use of Contexts and Hooks would make mocking and verifying behaviour and edge cases smooth
+- Client side filtering and sorting could be implemented via Tanstack Table. Not done due to time constraints
+-
+
+# known Issues
+
+- Date Pickers do not position correctly in FireFox. Leaving as is due to time constraints
+- Chrome device emulation seems broken, however page loads as expected in Mozilla device emulation
