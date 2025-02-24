@@ -44,7 +44,7 @@ export const getNytUrl = (filters: SearchArgs): string | undefined => {
   if (url.searchParams.size === 0) {
     return undefined;
   }
-  url.searchParams.append("api-key", "uozEQ9mu4bpfmGMgm87tmF57p3fGitH8");
+  url.searchParams.append("api-key", import.meta.env.VITE_APP_NYT_KEY);
   url.searchParams.append("sort", "newest");
   return url.toString();
 };

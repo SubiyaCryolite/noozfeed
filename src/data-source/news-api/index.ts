@@ -3,7 +3,6 @@ import { canUseSource, getArticle } from "@/utils";
 import { NewsApiResults } from "@/interfaces/external/news-api";
 
 const DataSourceName = "news.api";
-const DEV_KEY = "021aa853b901466f9c87b5c27b561db1";
 
 export const NewsApiDataSource = {
   value: DataSourceName,
@@ -34,7 +33,7 @@ export const getNewsApiUrl = (filters: SearchArgs): string | undefined => {
   if (url.searchParams.size === 0) {
     return undefined;
   }
-  url.searchParams.append("apiKey", DEV_KEY);
+  url.searchParams.append("apiKey", import.meta.env.VITE_APP_NEWSAPI_KEY);
   url.searchParams.append("pageSize", "10");
   url.searchParams.append("sortBy", "publishedAt");
   return url.toString();

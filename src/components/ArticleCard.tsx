@@ -46,15 +46,20 @@ const ArticleCard: React.FC<ArticleCardProps> = ({
           <div className="max-h-20 overflow-clip">{article.description}</div>
           <div className={cn("card-actions mt-4 justify-end")}>
             <span
-              className={cn("badge badge-secondary mr-auto", {
+              className={cn("badge badge-primary mr-auto", {
                 "badge-outline":
-                  !filters.publications[article.publication.value!],
+                  !filters.publications[article.publication.value],
               })}
             >
               {article.publication.label}
             </span>
-            <span className="badge badge-outline">Fashion</span>
-            <span className="badge badge-outline">Products</span>
+            <span
+              className={cn("badge badge-primary", {
+                "badge-outline": !filters.categories[article.category.value],
+              })}
+            >
+              {article.category.label}
+            </span>
           </div>
         </div>
       </>

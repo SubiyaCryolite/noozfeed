@@ -3,7 +3,6 @@ import { canUseSource, getArticle } from "@/utils";
 import { GuardianResults } from "@/interfaces/external/guardian";
 
 const DataSourceName = "guardian.api";
-const DEV_KEY = "4e297e2c-3412-4db2-9d7f-41dad7698ff6";
 
 export const GuardianDataSource = {
   value: DataSourceName,
@@ -37,7 +36,7 @@ export const getGuardianUrl = (filters: SearchArgs): string | undefined => {
   if (url.searchParams.size === 0) {
     return undefined;
   }
-  url.searchParams.append("api-key", DEV_KEY);
+  url.searchParams.append("api-key", import.meta.env.VITE_APP_GUARDIAN_KEY);
   url.searchParams.append("lang", "en");
   url.searchParams.append("page-size", "10");
   url.searchParams.append("order-by", "newest");
