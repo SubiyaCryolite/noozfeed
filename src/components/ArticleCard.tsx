@@ -22,7 +22,7 @@ const ArticleCard: React.FC<ArticleCardProps> = ({
     <div
       ref={ref}
       className={cn(
-        "card w-full bg-gray-100 shadow-sm md:w-90 lg:w-96",
+        "card w-full bg-gray-100 shadow-sm md:w-80",
         { skeleton },
         className,
       )}
@@ -46,7 +46,7 @@ const ArticleCard: React.FC<ArticleCardProps> = ({
           <div className="max-h-20 overflow-clip">{article.description}</div>
           <div className={cn("card-actions mt-4 justify-end")}>
             <span
-              className={cn("badge badge-primary mr-auto", {
+              className={cn("badge badge-primary mr-auto truncate", {
                 "badge-outline":
                   !filters.publications[article.publication.value],
               })}
