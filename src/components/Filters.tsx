@@ -1,4 +1,4 @@
-import { use, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { DayPicker } from "react-day-picker";
 
 import AppContext from "@/contexts/AppContext";
@@ -6,10 +6,46 @@ import SearchContext from "@/contexts/SearchContext";
 import MagnifyingGlassIcon from "@heroicons/react/24/outline/MagnifyingGlassIcon";
 import XMarkIcon from "@heroicons/react/24/outline/XMarkIcon";
 import Cog8ToothIcon from "@heroicons/react/24/outline/Cog8ToothIcon";
+import ArrowPathIcon from "@heroicons/react/24/outline/ArrowPathIcon";
 import { cn, printLocalDate } from "@/utils";
 
 const minDate = new Date(1900, 1, 1);
 const today = new Date();
+
+interface FilterIndicatorProps extends React.HTMLProps<HTMLDivElement> {
+  label?: string;
+  active?: boolean;
+  circular?: boolean;
+}
+
+const FilterIndicator: React.FC<FilterIndicatorProps> = ({
+  active,
+  label,
+  children,
+  className,
+  circular,
+  ref,
+  ...props
+}) => {
+  return (
+    <div ref={ref} className={cn("indicator", className)} {...props}>
+      <span
+        className={cn(
+          "indicator-item",
+          { badge: !circular },
+          { "badge-sm": !circular },
+          { "badge-secondary": !circular },
+          { status: circular },
+          { "status-secondary": circular },
+          { invisible: !active },
+        )}
+      >
+        {label}
+      </span>
+      {children}
+    </div>
+  );
+};
 
 interface FilterOptionProps extends React.HTMLProps<HTMLLIElement> {
   value: string;
@@ -36,6 +72,7 @@ const FilterOption: React.FC<FilterOptionProps> = ({
 };
 
 export const Filters: React.FC = () => {
+  const [isStale, setIsStale] = useState<boolean>(false);
   const [startDate, setStartDate] = useState<Date | undefined>();
   const [endDate, setEndDate] = useState<Date | undefined>(new Date());
 
@@ -59,14 +96,21 @@ export const Filters: React.FC = () => {
 
   function clear() {
     setStartDate(undefined);
-    setEndDate(undefined);
+    setEndDate(new Date());
     setCategories({});
     setAuthors({});
     setSources({});
     setPublications({});
   }
 
+  function refresh() {
+    setFilters((prevState) => ({
+      ...prevState,
+    }));
+  }
+
   function apply() {
+    setIsStale(false);
     setFilters((prevState) => ({
       ...prevState,
       startDate,
@@ -98,15 +142,28 @@ export const Filters: React.FC = () => {
     setPublications((prevState) => updateArgs(prevState, value, active));
   }
 
+  useEffect(() => {
+    setIsStale(true);
+  }, [startDate, endDate, categories, authors, sources]);
+
+  const authorFilters = activeFilters(authors);
+  const categoryFilters = activeFilters(categories);
+  const publicationFilters = activeFilters(publications);
+
   return (
     <div className="join join-vertical sm:join-horizontal lg:align-auto w-full sm:justify-center xl:col-span-2 xl:w-auto xl:justify-end">
-      <button
-        popoverTarget="rdp-popover-from"
-        className="btn btn-outline join-item"
-        style={{ anchorName: "--rdp-date-from" } as React.CSSProperties}
+      <FilterIndicator
+        active={Boolean(startDate)}
+        circular={Boolean(startDate)}
       >
-        From
-      </button>
+        <button
+          popoverTarget="rdp-popover-from"
+          className="btn btn-ghost"
+          style={{ anchorName: "--rdp-date-from" } as React.CSSProperties}
+        >
+          From
+        </button>
+      </FilterIndicator>
       <div
         popover="auto"
         id="rdp-popover-from"
@@ -131,13 +188,15 @@ export const Filters: React.FC = () => {
         />
       </div>
 
-      <button
-        popoverTarget="rdp-popover-to"
-        className="btn btn-outline join-item"
-        style={{ anchorName: "--rdp-date-to" } as React.CSSProperties}
-      >
-        To
-      </button>
+      <FilterIndicator active={Boolean(endDate)} circular={Boolean(endDate)}>
+        <button
+          popoverTarget="rdp-popover-to"
+          className="btn btn-ghost"
+          style={{ anchorName: "--rdp-date-to" } as React.CSSProperties}
+        >
+          To
+        </button>
+      </FilterIndicator>
       <div
         popover="auto"
         id="rdp-popover-to"
@@ -160,16 +219,9 @@ export const Filters: React.FC = () => {
       </div>
 
       <div className="dropdown dropdown-start">
-        <button className="btn btn-outline join-item btn-block md:w-auto">
-          Author
-          {/* <div
-            className={cn("badge badge-sm badge-secondary", {
-              invisible: !numAuthors.current,
-            })}
-          >
-            {numAuthors.current}
-          </div> */}
-        </button>
+        <FilterIndicator active={authorFilters > 0} label={`${authorFilters}`}>
+          <button className="btn btn-ghost btn-block md:w-auto">Author</button>
+        </FilterIndicator>
         <div className="dropdown-content menu bg-base-100 rounded-box overflow-x-none z-1 max-h-160 w-full overflow-x-clip overflow-y-auto p-2 shadow-sm md:w-56">
           <ul tabIndex={0}>
             {app.authors.map(({ label, value }, i) => (
@@ -187,9 +239,14 @@ export const Filters: React.FC = () => {
       </div>
 
       <div className="dropdown dropdown-start">
-        <button className="btn btn-outline join-item btn-block md:w-auto">
-          Category
-        </button>
+        <FilterIndicator
+          active={categoryFilters > 0}
+          label={`${categoryFilters}`}
+        >
+          <button className="btn btn-ghost btn-block md:w-auto">
+            Category
+          </button>
+        </FilterIndicator>
         <div className="dropdown-content menu bg-base-100 rounded-box overflow-x-none z-1 max-h-160 w-full overflow-x-clip overflow-y-auto p-2 shadow-sm md:w-56">
           <ul tabIndex={0}>
             {app.categories.map(({ label, value }, i) => (
@@ -207,9 +264,12 @@ export const Filters: React.FC = () => {
       </div>
 
       <div className="dropdown dropdown-start">
-        <button className="btn btn-outline join-item btn-block md:w-auto">
-          Sources
-        </button>
+        <FilterIndicator
+          active={publicationFilters > 0}
+          label={`${publicationFilters}`}
+        >
+          <button className="btn btn-ghost btn-block md:w-auto">Sources</button>
+        </FilterIndicator>
         <div className="dropdown-content menu bg-base-100 rounded-box overflow-x-none z-1 max-h-160 w-full overflow-x-clip overflow-y-auto p-2 shadow-sm md:w-56">
           <ul tabIndex={0}>
             {app.publications.map(({ label, value }, i) => (
@@ -228,7 +288,7 @@ export const Filters: React.FC = () => {
 
       <div className="dropdown dropdown-start">
         <button
-          className="btn btn-outline join-item btn-block md:w-auto"
+          className="btn btn-ghost join-item btn-block md:w-auto"
           title="Configure datasources"
         >
           <span className="sr-only">Configure datasources</span>
@@ -251,7 +311,7 @@ export const Filters: React.FC = () => {
       </div>
 
       <button
-        className="btn join-item btn-secondary"
+        className="btn join-item btn-warning"
         onClick={clear}
         title="Clear filters"
       >
@@ -259,7 +319,17 @@ export const Filters: React.FC = () => {
         <XMarkIcon className="invisbile size-4 md:visible" />
       </button>
       <button
-        className="btn join-item btn-primary"
+        className="btn join-item btn-secondary"
+        onClick={refresh}
+        title="Refresh filters"
+      >
+        <span className="sr-only">Refresh</span>
+        <ArrowPathIcon className="invisbile size-4 md:visible" />
+      </button>
+      <button
+        className={cn("btn join-item btn-primary", {
+          "animate-pulse": isStale,
+        })}
         onClick={apply}
         title="Search"
       >
@@ -288,4 +358,8 @@ const updateArgs = (
   const staging = { ...src };
   staging[value] = !active;
   return staging;
+};
+
+const activeFilters = (value: Record<string, boolean>): number => {
+  return Object.values(value).filter((active) => active).length;
 };

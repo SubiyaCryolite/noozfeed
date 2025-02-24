@@ -1,4 +1,4 @@
-import { use, useEffect, useState } from "react";
+import { use, useEffect, useState, useMemo } from "react";
 import {
   ColumnDef,
   getPaginationRowModel,
@@ -6,6 +6,7 @@ import {
   getCoreRowModel,
   useReactTable,
   PaginationState,
+  SortingState,
 } from "@tanstack/react-table";
 import NewspaperIcon from "@heroicons/react/24/outline/NewspaperIcon";
 
@@ -17,18 +18,31 @@ import Pagination from "./Pagination";
 import { Article } from "@/interfaces";
 import { cn } from "@/utils";
 
-const columns: ColumnDef<Article>[] = [];
-
 const Results: React.FC = () => {
   //magic happens here :)
   useDataSources();
   const { streaming, results, isLoading, filters } = use(SearchContext)!;
 
+  const [sorting, setSorting] = useState<SortingState>([
+    { id: "publishedAt", desc: true },
+  ]);
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: 8,
   });
   const { pageIndex, pageSize } = pagination;
+
+  //only care about filterable columns i.e date,
+  const columns = useMemo<ColumnDef<Article>[]>(
+    () => [
+      {
+        id: "publishedAt",
+        accessorKey: "publishedAt",
+        enableSorting: true,
+      },
+    ],
+    [],
+  );
 
   const count = isLoading ? streaming.length : results.length;
   const data = isLoading ? streaming : results;
@@ -37,6 +51,7 @@ const Results: React.FC = () => {
     data,
     columns,
     state: {
+      sorting,
       pagination,
     },
     getCoreRowModel: getCoreRowModel(),

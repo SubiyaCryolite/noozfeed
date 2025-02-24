@@ -7,6 +7,9 @@ export const DEFAULT_CATEGORIES: Category[] = [
   { value: "travel", label: "Travel" },
   { value: "food", label: "Food" },
   { value: "sports", label: "Sports" },
+  { value: "football", label: "Football" },
+  { value: "politics", label: "Politics" },
+  { value: "music", label: "Music" },
 ];
 
 /**

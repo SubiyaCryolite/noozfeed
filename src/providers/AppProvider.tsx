@@ -73,8 +73,9 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
 
   const updateMetadata = useCallback(
     (articles: Article[]) => {
-      const _categories = articles.map(({ category }) => category);
-      if (_categories.length) updateCategories(_categories);
+      //TODO Rely on canned categories. List is overwhelming and dirty
+      //const _categories = articles.map(({ category }) => category);
+      //if (_categories.length) updateCategories(_categories);
 
       const _authors = articles.flatMap((article) => article.authors);
       if (_authors.length) updateAuthors(_authors);
@@ -82,7 +83,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
       const _publications = articles.map(({ publication }) => publication);
       if (_publications.length) updatePublications(_publications);
     },
-    [updateCategories, updateAuthors, updatePublications],
+    [updateAuthors, updatePublications],
   );
 
   const payload = useMemo<AppContextType>(

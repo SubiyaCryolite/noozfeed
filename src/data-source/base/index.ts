@@ -1,5 +1,6 @@
 import { use, useRef, useEffect, useState } from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 import AppContext from "@/contexts/AppContext";
 import SearchContext from "@/contexts/SearchContext";
@@ -41,7 +42,10 @@ export const useExternalSource = <T>(
           if (axios.isCancel(err)) {
             console.log("Request canceled", err.message);
           } else {
-            //toastrsetError(err);
+            toast.error(
+              `Could not retrieve data from source [${dataSource.label}]. See log for details`,
+            );
+            console.log(err);
           }
         })
         .finally(() => {
@@ -50,7 +54,7 @@ export const useExternalSource = <T>(
     } else {
       setIsLoading(false);
     }
-  }, [filters, setStreaming, updateMetadata, transformer, getUrl]);
+  }, [filters, setStreaming, updateMetadata, transformer, getUrl, dataSource]);
 
   /**
    * Cleanup
