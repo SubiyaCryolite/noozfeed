@@ -1,50 +1,29 @@
-# React + TypeScript + Vite
+# NoozFeed - Demo News Aggregator
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Created using [React 19](https://react.dev/) and [Typescript](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html).
 
-Currently, two official plugins are available:
+Scaffolded and developed against [Vite](https://vitejs.dev/guide/)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Submitted by [Ifunga Ndana](https://github.com/SubiyaCryolite)
 
-## Expanding the ESLint configuration
+# Building the project: Docker
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+- Be sure to be in the projects root directory.
+- Run `docker build -t noozfeed .`
 
-- Configure the top-level `parserOptions` property like this:
+# Running the project: Docker
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+- First, ensure no other services are listening on port 8080
+- Run `docker run -it --rm -d -p 8080:80 --name take-home-ifunga noozfeed`
+- Navigate to [http://localhost:8080](http://localhost:8080)
+- Open in your browser of choice, enjoy
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+# Closing the project: Docker
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+SImply run `docker stop take-home-ifunga`
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+# Running the project: Locally
+
+- Open this project from the root directory
+- Run `npm install` at least once
+- Run `npm run dev`, this will load the demo at [http://localhost:9000](http://localhost:9000) by default

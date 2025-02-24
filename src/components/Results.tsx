@@ -57,6 +57,7 @@ const Results: React.FC = () => {
     getCoreRowModel: getCoreRowModel(),
     rowCount: count,
     onPaginationChange: setPagination,
+    onSortingChange: setSorting,
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
   });
