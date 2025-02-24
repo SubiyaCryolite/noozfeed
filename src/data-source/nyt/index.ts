@@ -32,13 +32,22 @@ export const getNytUrl = (filters: SearchArgs): string | undefined => {
     url.searchParams.append("end_date", nytDate(filters.endDate));
   }
 
-  const categories: string[] = [];
-  Object.entries(filters.categories).forEach(([key, active]) => {
-    if (active) categories.push(key);
-  });
+  /**
+   * Works with supported [Section Name Values]
+   * https://developer.nytimes.com/docs/articlesearch-product/1/overview
+   */
+  const categories = Object.entries(filters.categories)
+    .filter(([, active]) => active)
+    .map(([key]) => key);
   if (categories.length) {
-    //TODO NYT fq
-    //url.searchParams.append("section", categories[0]);
+    url.searchParams.append("fq", `section_name:("${categories.join(`","`)}")`);
+  }
+
+  const publications = Object.entries(filters.publications)
+    .filter(([, active]) => active)
+    .map(([key]) => key);
+  if (publications.length) {
+    url.searchParams.append("fq", `source:("${publications.join(`","`)}")`);
   }
 
   if (url.searchParams.size === 0) {
@@ -57,8 +66,8 @@ export const getNytTransformer = (data: NytResults): Article[] => {
     article.description = result.snippet;
     article.title = result.headline.main;
     article.publishedAt = result.pub_date;
-    article.publication.value = "nyt";
-    article.publication.label = "The New York Times";
+    article.publication.value = result.source.toLowerCase();
+    article.publication.label = result.source;
     result.byline.person.forEach((p) => {
       const names = [];
       if (p.firstname) names.push(p.firstname);
