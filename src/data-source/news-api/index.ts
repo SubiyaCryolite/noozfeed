@@ -24,11 +24,6 @@ export const getNewsApiUrl = (filters: SearchArgs): string | undefined => {
   if (filters.endDate) {
     url.searchParams.append("to", filters.endDate.toISOString());
   }
-  //TODO add publications filter for sources
-  /**
-   * sources
-   * A comma-seperated string of identifiers (maximum 20) for the news sources or blogs you want headlines from. Use the /sources endpoint to locate these programmatically or look at the sources index.
-   */
 
   if (url.searchParams.size === 0) {
     return undefined;
