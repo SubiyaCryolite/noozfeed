@@ -22,7 +22,7 @@ const ArticleCard: React.FC<ArticleCardProps> = ({
     <div
       ref={ref}
       className={cn(
-        "card w-96 bg-gray-100 shadow-sm", //TODO control width here
+        "card w-full bg-gray-100 shadow-sm md:w-90 lg:w-96",
         { skeleton },
         className,
       )}

@@ -11,8 +11,8 @@ interface FeedProps {
 export const Feed: React.FC<FeedProps> = ({ type }) => {
   return (
     <SearchProvider type={type}>
-      <main id={`feed-${type}`} className="lex-1 px-4">
-        <div className="bg bg-base-300 br-4 mb-4 flex w-full justify-between rounded-sm p-4">
+      <main id={`feed-${type}`} className="flex-1 px-4">
+        <div className="bg bg-base-300 br-4 mb-4 flex grid w-full grid-cols-1 justify-between gap-4 rounded-sm p-4 xl:grid-cols-3">
           <SearchInput />
           <Filters />
         </div>

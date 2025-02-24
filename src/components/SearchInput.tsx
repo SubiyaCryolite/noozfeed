@@ -34,7 +34,7 @@ export const SearchInput: React.FC = () => {
   }, []);
 
   return (
-    <label className="input">
+    <label className="input w-full md:w-auto">
       <MagnifyingGlassIcon className="h-[1em] opacity-50" />
       <input
         type="search"

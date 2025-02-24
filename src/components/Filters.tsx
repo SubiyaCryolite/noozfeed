@@ -3,6 +3,12 @@ import { DayPicker } from "react-day-picker";
 
 import AppContext from "@/contexts/AppContext";
 import SearchContext from "@/contexts/SearchContext";
+import ChevronUpIcon from "@heroicons/react/24/outline/ChevronUpIcon";
+import ChevronDownIcon from "@heroicons/react/24/outline/ChevronDownIcon";
+import MagnifyingGlassIcon from "@heroicons/react/24/outline/MagnifyingGlassIcon";
+import XMarkIcon from "@heroicons/react/24/outline/XMarkIcon";
+import EyeSlashIcon from "@heroicons/react/24/outline/EyeSlashIcon";
+import Cog8ToothIcon from "@heroicons/react/24/outline/Cog8ToothIcon";
 import { cn, printLocalDate } from "@/utils";
 
 const minDate = new Date(1900, 1, 1);
@@ -96,7 +102,7 @@ export const Filters: React.FC = () => {
   }
 
   return (
-    <div className="join join-vertical sm:join-horizontal">
+    <div className="join join-vertical sm:join-horizontal lg:align-auto w-full sm:justify-center xl:col-span-2 xl:w-auto xl:justify-end">
       <button
         popoverTarget="rdp-popover-from"
         className="btn btn-outline join-item"
@@ -107,7 +113,7 @@ export const Filters: React.FC = () => {
       <div
         popover="auto"
         id="rdp-popover-from"
-        className="dropdown shadow-sm"
+        className="dropdown w-full shadow-sm md:w-auto"
         style={{ positionAnchor: "--rdp-date-from" } as React.CSSProperties}
       >
         <DayPicker
@@ -138,7 +144,7 @@ export const Filters: React.FC = () => {
       <div
         popover="auto"
         id="rdp-popover-to"
-        className="dropdown shadow-sm"
+        className="dropdown w-full shadow-sm md:w-auto"
         style={{ positionAnchor: "--rdp-date-to" } as React.CSSProperties}
       >
         <DayPicker
@@ -157,7 +163,7 @@ export const Filters: React.FC = () => {
       </div>
 
       <div className="dropdown dropdown-start">
-        <button className="btn btn-outline join-item">
+        <button className="btn btn-outline join-item btn-block md:w-auto">
           Author
           {/* <div
             className={cn("badge badge-sm badge-secondary", {
@@ -167,8 +173,8 @@ export const Filters: React.FC = () => {
             {numAuthors.current}
           </div> */}
         </button>
-        <div className="dropdown-content menu bg-base-100 rounded-box overflow-x-none z-1 max-h-160 w-72 overflow-x-clip overflow-y-auto p-2 shadow-sm">
-          <ul tabIndex={0} className="w-full">
+        <div className="dropdown-content menu bg-base-100 rounded-box overflow-x-none z-1 max-h-160 w-full overflow-x-clip overflow-y-auto p-2 shadow-sm md:w-56">
+          <ul tabIndex={0}>
             {app.authors.map(({ label, value }, i) => (
               <FilterOption
                 onClick={handleAuthor}
@@ -184,8 +190,10 @@ export const Filters: React.FC = () => {
       </div>
 
       <div className="dropdown dropdown-start">
-        <button className="btn btn-outline join-item">Category</button>
-        <div className="dropdown-content menu bg-base-100 rounded-box overflow-x-none z-1 max-h-160 w-56 overflow-x-clip overflow-y-auto p-2 shadow-sm">
+        <button className="btn btn-outline join-item btn-block md:w-auto">
+          Category
+        </button>
+        <div className="dropdown-content menu bg-base-100 rounded-box overflow-x-none z-1 max-h-160 w-full overflow-x-clip overflow-y-auto p-2 shadow-sm md:w-56">
           <ul tabIndex={0}>
             {app.categories.map(({ label, value }, i) => (
               <FilterOption
@@ -202,8 +210,10 @@ export const Filters: React.FC = () => {
       </div>
 
       <div className="dropdown dropdown-start">
-        <button className="btn btn-outline join-item">Publications</button>
-        <div className="dropdown-content menu bg-base-100 rounded-box overflow-x-none z-1 max-h-160 w-56 overflow-x-clip overflow-y-auto p-2 shadow-sm">
+        <button className="btn btn-outline join-item btn-block md:w-auto">
+          Sources
+        </button>
+        <div className="dropdown-content menu bg-base-100 rounded-box overflow-x-none z-1 max-h-160 w-full overflow-x-clip overflow-y-auto p-2 shadow-sm md:w-56">
           <ul tabIndex={0}>
             {app.publications.map(({ label, value }, i) => (
               <FilterOption
@@ -220,8 +230,14 @@ export const Filters: React.FC = () => {
       </div>
 
       <div className="dropdown dropdown-start">
-        <button className="btn btn-outline join-item">Sources</button>
-        <div className="dropdown-content menu bg-base-100 rounded-box overflow-x-none z-1 max-h-160 w-56 overflow-x-clip overflow-y-auto p-2 shadow-sm">
+        <button
+          className="btn btn-outline join-item btn-block md:w-auto"
+          title="Configure datasources"
+        >
+          <span className="sr-only">Configure datasources</span>
+          <Cog8ToothIcon className="size-4" />
+        </button>
+        <div className="dropdown-content menu bg-base-100 rounded-box overflow-x-none z-1 max-h-160 w-full overflow-x-clip overflow-y-auto p-2 shadow-sm md:w-56">
           <ul tabIndex={0}>
             {app.sources.map(({ label, value }, i) => (
               <FilterOption
@@ -237,11 +253,21 @@ export const Filters: React.FC = () => {
         </div>
       </div>
 
-      <button className="btn join-item btn-secondary" onClick={clear}>
-        Clear
+      <button
+        className="btn join-item btn-secondary"
+        onClick={clear}
+        title="Clear filters"
+      >
+        <span className="sr-only">Clear filters</span>
+        <XMarkIcon className="invisbile size-4 md:visible" />
       </button>
-      <button className="btn join-item btn-primary" onClick={apply}>
-        Apply
+      <button
+        className="btn join-item btn-primary"
+        onClick={apply}
+        title="Search"
+      >
+        <span className="sr-only">Search</span>
+        <MagnifyingGlassIcon className="invisbile size-4 md:visible" />
       </button>
     </div>
   );
