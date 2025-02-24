@@ -4,7 +4,7 @@ import SearchContext from "@/contexts/SearchContext";
 
 export const SearchInput: React.FC = () => {
   const [searchText, setSearchText] = useState<string>("");
-  const timerRef = useRef<NodeJS.Timeout | undefined>(undefined);
+  const timerRef = useRef<number>(0);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     setSearchText(event.target.value);
@@ -16,7 +16,7 @@ export const SearchInput: React.FC = () => {
   const debounce = useCallback(
     (debouncedValue: string) => {
       clearTimeout(timerRef.current);
-      timerRef.current = setTimeout(() => {
+      timerRef.current = window.setTimeout(() => {
         setFilters((prevState) => ({
           ...prevState,
           searcthText: debouncedValue,
