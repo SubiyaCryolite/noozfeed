@@ -73,23 +73,14 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
 
   const updateMetadata = useCallback(
     (articles: Article[]) => {
-      const sourcedCategories = articles
-        .flatMap((article) => article.keywords)
-        .map((keyword) => ({ value: keyword, label: keyword }));
-      if (sourcedCategories.length) updateCategories(sourcedCategories);
+      const _categories = articles.map(({ category }) => category);
+      if (_categories.length) updateCategories(_categories);
 
-      const authors: Author[] = articles
-        .flatMap((article) => article.authors)
-        .map((author) => ({ value: author, label: author }));
-      if (authors.length) updateAuthors(authors);
+      const _authors = articles.flatMap((article) => article.authors);
+      if (_authors.length) updateAuthors(_authors);
 
-      const publications: Publication[] = articles.map(
-        ({ publication: { value, label } }) => ({
-          value,
-          label,
-        }),
-      );
-      if (publications.length) updatePublications(publications);
+      const _publications = articles.map(({ publication }) => publication);
+      if (_publications.length) updatePublications(_publications);
     },
     [updateCategories, updateAuthors, updatePublications],
   );

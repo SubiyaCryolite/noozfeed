@@ -59,8 +59,7 @@ export interface AppContextType extends AppPreferences {
  */
 export interface Article extends BaseArticle {
   uuid: string;
-  authors: string[]; //array of options
-  keywords: string[]; //remove
+  authors: Author[]; //array of options
   category: Option; //singular
   publication: Option; //singular
 }

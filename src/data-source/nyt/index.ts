@@ -59,7 +59,14 @@ export const getNytTransformer = (data: NytResults): Article[] => {
     article.publishedAt = result.pub_date;
     article.publication.value = "nyt";
     article.publication.label = "The New York Times";
-    article.authors.push(result.byline.original);
+    result.byline.person.forEach((p) => {
+      const names = [];
+      if (p.firstname) names.push(p.firstname);
+      if (p.middlename) names.push(p.middlename);
+      if (p.lastname) names.push(p.lastname);
+      const name = names.join(" ");
+      article.authors.push({ label: name, value: name.toLowerCase() });
+    });
     result.multimedia.forEach(({ url, subType, type }) => {
       if (type === "image" && subType === "googleFourByThree") {
         article.urlToImage = `https://static01.nyt.com/${url}`;

@@ -81,7 +81,6 @@ export const canUseSource = (
 export const getArticle = (): Article => ({
   uuid: uuid().toString(),
   authors: [],
-  keywords: [],
   publication: {
     value: "unknown",
     label: "Unknown",
