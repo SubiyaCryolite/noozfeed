@@ -30,13 +30,7 @@ const ArticleCard: React.FC<ArticleCardProps> = ({
     >
       <>
         <figure className={cn({ invisible: skeleton })}>
-          <img
-            src={
-              article.urlToImage ??
-              "https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
-            }
-            alt="Shoes"
-          />
+          <img src={article.urlToImage} />
         </figure>
         <div className={cn("card-body", { invisible: skeleton })}>
           <h2

@@ -1,52 +1,22 @@
-import { use, useEffect } from "react";
-import useSWR from "swr";
-
-import AppContext from "@/contexts/AppContext";
-import SearchContext from "@/contexts/SearchContext";
 import { Article, SearchArgs } from "@/interfaces";
-import { canUseSource, fetcher, getArticle } from "@/utils";
+import { canUseSource, getArticle } from "@/utils";
 import { NewsApiResults } from "@/interfaces/external/news-api";
 
 const DataSourceName = "news.api";
 const DEV_KEY = "021aa853b901466f9c87b5c27b561db1";
 
-export const useNewsApiSource = () => {
-  const { filters, setStreaming } = use(SearchContext)!;
-  const { updateSources, updateMetadata } = use(AppContext)!;
-
-  const { data, isLoading } = useSWR<NewsApiResults>(
-    getUrlKey(filters),
-    fetcher,
-  );
-
-  //register this source, happens once
-  useEffect(() => {
-    updateSources([{ value: DataSourceName, label: "News API" }]);
-  }, [updateSources]);
-
-  useEffect(() => {
-    if (data) {
-      const articles: Article[] = transform(data);
-      updateMetadata(articles);
-      setStreaming((prevState) => [...prevState, ...articles]);
-    }
-  }, [data, setStreaming, updateMetadata]);
-
-  return !isLoading;
+export const NewsApiDataSource = {
+  value: DataSourceName,
+  label: "News API",
 };
 
-export default useNewsApiSource;
-
-const getUrlKey = (filters: SearchArgs): string | undefined => {
+export const getNewsApiUrl = (filters: SearchArgs): string | undefined => {
   if (!canUseSource(filters.sources, DataSourceName)) {
     return undefined;
   }
-  if (!filters.searcthText?.length) {
-    return undefined; //invalid args
-  }
 
   const url = new URL("https://newsapi.org/v2/everything");
-  if (filters.searcthText.length) {
+  if (filters.searcthText?.length) {
     url.searchParams.append("q", filters.searcthText);
   }
   if (filters.startDate) {
@@ -70,7 +40,7 @@ const getUrlKey = (filters: SearchArgs): string | undefined => {
   return url.toString();
 };
 
-const transform = (data: NewsApiResults): Article[] => {
+export const getNewsApiTransformer = (data: NewsApiResults): Article[] => {
   const results: Article[] = [];
   data.articles?.forEach((result) => {
     const article = getArticle();

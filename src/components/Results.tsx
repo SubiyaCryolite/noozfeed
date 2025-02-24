@@ -11,6 +11,8 @@ const Results: React.FC = () => {
   const items = isLoading ? streaming : results;
   //react table here
 
+  console.log({ streaming, results });
+
   return (
     <>
       <div className="bg bg-base-400 flex w-full justify-between">
@@ -19,7 +21,7 @@ const Results: React.FC = () => {
       <div className="bg bg-base-400 flex w-full justify-between">
         Table pagination here
       </div>
-      <div className="bg bg-base-400 flex grid w-full grid-cols-1 justify-between gap-4 overflow-y-auto md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <div className="bg bg-base-400 lg:grid-cols- flex grid w-full grid-cols-1 justify-between gap-4 overflow-y-auto md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
         {items.map((item) => (
           <ArticleCard key={item.uuid} article={item} skeleton={isLoading} />
         ))}

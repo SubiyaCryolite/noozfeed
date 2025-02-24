@@ -91,4 +91,5 @@ export const getArticle = (): Article => ({
   url: undefined,
   urlToImage: undefined,
   publishedAt: undefined,
+  categories: [],
 });

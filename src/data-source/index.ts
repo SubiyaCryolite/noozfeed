@@ -1,22 +1,48 @@
 import { use, useEffect } from "react";
-import { useTestSource } from "./test";
+import { TestDataSource, getTestTransformer, getTestUrl } from "./test";
 import SearchContext from "@/contexts/SearchContext";
-import useNewsApiSource from "./news-api";
+import {
+  getNewsApiTransformer,
+  getNewsApiUrl,
+  NewsApiDataSource,
+} from "./news-api";
+import {
+  getGuardianTransformer,
+  getGuardianUrl,
+  GuardianDataSource,
+} from "./guardian";
+import useExternalSource from "./base";
+import { NpmResults } from "@/interfaces/external";
+import { NewsApiResults } from "@/interfaces/external/news-api";
+import { GuardianResults } from "@/interfaces/external/guardian";
 
 export const useDataSources = () => {
   const { setArticles, streaming, setIsLoading } = use(SearchContext)!;
 
-  const isTestDone = useTestSource();
-  const isNewsApiDone = useNewsApiSource();
-  // TODO const isBbcDone = useTestSource();
-  // TODO const isNytDone = useTestSource();
+  const isTestDone = useExternalSource<NpmResults>(
+    TestDataSource,
+    getTestUrl,
+    getTestTransformer,
+  );
+
+  // const isNewsApiDone = useExternalSource<NewsApiResults>(
+  //   NewsApiDataSource,
+  //   getNewsApiUrl,
+  //   getNewsApiTransformer,
+  // );
+
+  const isGuardianDone = useExternalSource<GuardianResults>(
+    GuardianDataSource,
+    getGuardianUrl,
+    getGuardianTransformer,
+  );
 
   useEffect(() => {
-    const allComplete = isTestDone && isNewsApiDone;
-    console.log({ allComplete });
+    const allComplete = isGuardianDone && isTestDone;
+    console.log({ isGuardianDone, isTestDone });
     if (allComplete) {
       setIsLoading(false);
       setArticles(streaming);
     }
-  }, [setIsLoading, setArticles, streaming, isTestDone, isNewsApiDone]);
+  }, [setIsLoading, setArticles, streaming, isTestDone, isGuardianDone]);
 };
